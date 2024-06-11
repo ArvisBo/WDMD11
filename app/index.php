@@ -4,25 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WMDMD11</title>
+    <link rel="stylesheet" href="./style.css">
 </head>
-<style>
-    table {
-    border: 1px solid black; 
-    }
-    table th {
-    border: 1px solid black; 
-    }
-    table td {
-       border: 1px solid black; 
-    }
-</style>
 <body>
     <?php 
         $list_data = [
             'list_name' => ( !empty($_POST['list_name']) ? $_POST['list_name'] : "" ), 
             'list_count' => ( !empty($_POST['list_count']) ? $_POST['list_count'] : "")
         ];
-        $votes = ( !empty($_POST['votes']) ? $_POST['votes'] : "");
+        $votes = ( !empty($_POST['votes']) ? $_POST['votes'] : []);
+        /* Funkcija, kas sakārto datus alfabētiskā secībā*/
+        function compareBySurname ($a, $b) {
+            return strcmp($a["person_surname"], $b["person_surname"]);
+        };
+        usort($votes, 'compareBySurname');   
     ?>
     <div>
         <!-- Pirmā forma -->
@@ -38,7 +33,7 @@
     <br>
     <div>
         <!-- Otrā forma -->
-         <?php if (!empty($_POST['list_name']) ) { ?>
+        <?php if (!empty($_POST['list_name']) ) { ?>
         <h1> <?php echo $list_data['list_name']; ?> </h1> <br>
         <form action="./index.php" method="post">
         <?php 
@@ -60,6 +55,7 @@
         </form>
         <?php } ?>
     </div>
+    <!-- Izvada ievadītās vērtības -->
     <div>
     <?php
         echo '<pre>';
@@ -77,7 +73,7 @@
                 <th>Balsojums</th>
             </tr>
             <?php
-                $count=0; 
+                $count=0;    
                 foreach($votes as $vote => $value) { 
                 $count++ ?>
                 <tr>
